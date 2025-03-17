@@ -4,6 +4,7 @@
 	{
 		public void Configure(EntityTypeBuilder<War> builder)
 		{
+			builder.ToTable(nameof(War));
 		}
 	}
 }

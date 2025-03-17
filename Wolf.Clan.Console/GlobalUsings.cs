@@ -18,5 +18,8 @@ global using Wolf.Clan.DataLayer;
 global using Wolf.Clan.DataLayer.Entities;
 global using Wolf.Utilities;
 
-global using Attack = Wolf.Clan.DataLayer.Entities.Attack;
-global using War = Wolf.Clan.DataLayer.Entities.War;
+global using ModelAttack = ConsoleClan.Models.Attack;
+global using ModelWar = ConsoleClan.Models.War;
+global using ModelClan = ConsoleClan.Models.Clan;
+global using DataWar = Wolf.Clan.DataLayer.Entities.War;
+global using DataAttack = Wolf.Clan.DataLayer.Entities.Attack;

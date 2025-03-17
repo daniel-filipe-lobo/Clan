@@ -1,5 +1,6 @@
 ﻿namespace Wolf.Clan.DataLayer.Entities
 {
+	[EntityTypeConfiguration(typeof(WarEntityTypeConfiguration))]
 	public record War
 	{
 		public int Id { get; set; }

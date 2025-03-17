@@ -4,6 +4,7 @@
 	{
 		public void Configure(EntityTypeBuilder<League> builder)
 		{
+			builder.ToTable(nameof(League));
 		}
 	}
 }

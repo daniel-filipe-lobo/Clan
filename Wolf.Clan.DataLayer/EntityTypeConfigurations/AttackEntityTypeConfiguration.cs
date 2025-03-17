@@ -4,6 +4,7 @@
 	{
 		public void Configure(EntityTypeBuilder<Attack> builder)
 		{
+			builder.ToTable(nameof(Attack));
 		}
 	}
 }
