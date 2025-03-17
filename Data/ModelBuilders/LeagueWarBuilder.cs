@@ -1,8 +1,4 @@
-﻿using ConsoleClan.Data.Entities;
-
-using Microsoft.EntityFrameworkCore;
-
-namespace ConsoleClan.Data.ModelBuilders
+﻿namespace ConsoleClan.Data.ModelBuilders
 {
 	internal static class LeagueWarBuilder
 	{
