@@ -1,10 +1,9 @@
-﻿namespace Wolf.Clan.Console
+﻿namespace Wolf.Clan.Console;
+
+internal class BusinessExceptionFactory : ExceptionFactory
 {
-	internal class BusinessExceptionFactory : ExceptionFactory
+	public override Exception Create(string? message, Exception innerException)
 	{
-		public override Exception Create(string? message, Exception innerException)
-		{
-			return new Exception(message, innerException);
-		}
+		return new Exception(message, innerException);
 	}
 }

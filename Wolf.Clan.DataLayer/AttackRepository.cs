@@ -17,19 +17,19 @@
 			{
 				using (var context = contextFactory.CreateDbContext())
 				{
-					var queriable = (
+					var queryable = 
 						from attack in context.AttackSet
 						where
 							attack.PlayerId == playerId &&
 							attack.WarId == warId &&
 							attack.Order == order
-						select attack);
-					return await queriable.SingleOrDefaultAsync();
+						select attack;
+					return await queryable.SingleOrDefaultAsync();
 				}
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler<DataExceptionFactory>.Create(logger, exception,
+				throw ExceptionHandler.Create(logger, exception,
 					(nameof(playerId), playerId),
 					(nameof(warId), warId),
 					(nameof(order), order));
@@ -48,7 +48,7 @@
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler<DataExceptionFactory>.Create(logger, exception,
+				throw ExceptionHandler.Create(logger, exception,
 					(nameof(attack), attack));
 			}
 		}
@@ -65,7 +65,7 @@
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler<DataExceptionFactory>.Create(logger, exception,
+				throw ExceptionHandler.Create(logger, exception,
 					(nameof(attack), attack));
 			}
 		}
@@ -76,18 +76,18 @@
 			{
 				using (var context = contextFactory.CreateDbContext())
 				{
-					var queriable = (
+					var queryable = 
 						from attack in context.AttackSet
 						where
 							warIds.Contains(attack.WarId) &&
 							attack.PlayerId == playerId
-						select attack);
-					return await queriable.ToListAsync();
+						select attack;
+					return await queryable.ToListAsync();
 				}
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler<DataExceptionFactory>.Create(logger, exception,
+				throw ExceptionHandler.Create(logger, exception,
 					(nameof(playerId), playerId),
 					(nameof(warIds), warIds));
 			}

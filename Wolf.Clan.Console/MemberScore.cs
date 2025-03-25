@@ -1,45 +1,43 @@
-﻿using ConsoleClan.Models;
+﻿namespace Wolf.Clan.Console;
 
-namespace ConsoleClan
+internal class MemberScore
 {
-	internal class MemberScore
+	public MemberDetailResponse MemberDetail { get; set; }
+	public List<Battle> Battles { get; private set; } = new List<Battle>();
+	public int DonationPenalty { get; private set; }
+
+	public MemberScore(MemberDetailResponse memberDetail)
 	{
-		public MemberDetail MemberDetail { get; set; }
-		public List<Battle> Battles { get; private set; } = new List<Battle>();
-		public int DonationPenalty { get; private set; }
+		MemberDetail = memberDetail;
+		CalculateDonationPenalty();
+	}
 
-		public MemberScore(MemberDetail memberDetail)
+	private void CalculateDonationPenalty()
+	{
+		var donations = MemberDetail.donations;
+		var donationsReceived = MemberDetail.donationsReceived;
+		var difference = donations - donationsReceived;
+		if (difference < 0)
 		{
-			MemberDetail = memberDetail;
-			CalculateDonationPenalty();
+			DonationPenalty = Math.Abs(difference / 250);
 		}
-
-		private void CalculateDonationPenalty()
+		else
 		{
-			var donations = MemberDetail.donations;
-			var donationsReceived = MemberDetail.donationsReceived;
-			var difference = donations - donationsReceived;
-			if (difference < 0)
-			{
-				DonationPenalty = Math.Abs(difference / 250);
-			}
-			else
-			{
-				DonationPenalty = 0;
-			}
-		}
-
-		public int CalculateTotalScore()
-		{
-			var penalties = DonationPenalty + Battles.Sum(battle => battle.Penalty);
-			var points = Battles.Sum(battle => battle.Stars);
-			return points - penalties;
-		}
-
-		public int CalculateTotalScoreForMigration()
-		{
-			var points = Battles.Sum(battle => battle.Stars);
-			return points - DonationPenalty;
+			DonationPenalty = 0;
 		}
 	}
+
+	public int CalculateTotalScore()
+	{
+		var penalties = DonationPenalty + Battles.Sum(battle => battle.Penalty);
+		var points = Battles.Sum(battle => battle.Stars);
+		return points - penalties;
+	}
+
+	public int CalculateTotalScoreForMigration()
+	{
+		var points = Battles.Sum(battle => battle.Stars);
+		return points - DonationPenalty;
+	}
 }
+

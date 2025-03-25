@@ -1,7 +1,6 @@
-﻿namespace ConsoleClan
+﻿namespace Wolf.Clan.Console;
+
+public interface IClash
 {
-	public interface IClash
-	{
-		Task ProcessAsync(AuthenticationTokeReference authenticationToke, string? fileName);
-	}
+	Task ProcessAsync(AuthenticationTokeReference authenticationToke, string? fileName);
 }

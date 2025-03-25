@@ -1,8 +1,7 @@
-﻿namespace ConsoleClan
+﻿namespace Wolf.Clan.Console;
+
+public enum BattleTypeReference
 {
-	public enum BattleTypeReference
-	{
-		League,
-		War
-	}
+	League,
+	War
 }

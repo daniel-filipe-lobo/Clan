@@ -10,10 +10,13 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.3" />
+    <PackageReference Include="Wolf.Utilities" Version="1.0.0.6" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Wolf.Utilities\Wolf.Utilities\Wolf.Utilities.csproj" />
+    <Reference Include="Wolf.Utilities">
+      <HintPath>..\..\Wolf.Utilities.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

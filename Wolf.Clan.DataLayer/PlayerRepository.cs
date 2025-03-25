@@ -23,7 +23,7 @@
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler<DataExceptionFactory>.Create(logger, exception,
+				throw ExceptionHandler.Create(logger, exception,
 					(nameof(player), player));
 			}
 		}
@@ -35,15 +35,15 @@
 				using (var context = contextFactory.CreateDbContext())
 				{
 					var queryable =
-						from player in context.PlayerSet
-						where tags.Contains(player.Tag)
-						select player;
+					from player in context.PlayerSet
+					where tags.Contains(player.Tag)
+					select player;
 					return await queryable.ToListAsync();
 				}
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler<DataExceptionFactory>.Create(logger, exception,
+				throw ExceptionHandler.Create(logger, exception,
 					(nameof(tags), tags));
 			}
 		}
@@ -65,7 +65,7 @@
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler<DataExceptionFactory>.Create(logger, exception,
+				throw ExceptionHandler.Create(logger, exception,
 					(nameof(notIntags), notIntags),
 					(nameof(hasLeft), hasLeft));
 			}
@@ -87,7 +87,7 @@
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler<DataExceptionFactory>.Create(logger, exception,
+				throw ExceptionHandler.Create(logger, exception,
 					(nameof(hasLeft), hasLeft));
 			}
 		}
@@ -104,7 +104,7 @@
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler<DataExceptionFactory>.Create(logger, exception,
+				throw ExceptionHandler.Create(logger, exception,
 					(nameof(players), players));
 			}
 		}

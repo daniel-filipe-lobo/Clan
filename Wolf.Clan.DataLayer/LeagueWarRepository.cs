@@ -23,7 +23,7 @@
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler<DataExceptionFactory>.Create(logger, exception,
+				throw ExceptionHandler.Create(logger, exception,
 					(nameof(leagueWar), leagueWar));
 			}
 		}
@@ -34,17 +34,17 @@
 			{
 				using (var context = contextFactory.CreateDbContext())
 				{
-					var queriable = (
-						from leagueWar in context.LeagueWarSet
-						where leagueWar.LeagueId == leagueId &&
-							leagueWar.WarId == warId
-						select leagueWar);
-					return await queriable.SingleOrDefaultAsync();
+					var queryable = (
+					from leagueWar in context.LeagueWarSet
+					where leagueWar.LeagueId == leagueId &&
+						leagueWar.WarId == warId
+					select leagueWar);
+					return await queryable.SingleOrDefaultAsync();
 				}
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler<DataExceptionFactory>.Create(logger, exception,
+				throw ExceptionHandler.Create(logger, exception,
 					(nameof(leagueId), leagueId),
 					(nameof(warId), warId));
 			}
@@ -56,16 +56,16 @@
 			{
 				using (var context = contextFactory.CreateDbContext())
 				{
-					var queriable = (
-						from leagueWar in context.LeagueWarSet
-						where warIds.Contains(leagueWar.WarId)
-						select leagueWar);
-					return await queriable.ToListAsync();
+					var queryable =
+					from leagueWar in context.LeagueWarSet
+					where warIds.Contains(leagueWar.WarId)
+					select leagueWar;
+					return await queryable.ToListAsync();
 				}
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler<DataExceptionFactory>.Create(logger, exception,
+				throw ExceptionHandler.Create(logger, exception,
 					(nameof(warIds), warIds));
 			}
 		}

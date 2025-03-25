@@ -23,7 +23,7 @@
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler<DataExceptionFactory>.Create(logger, exception,
+				throw ExceptionHandler.Create(logger, exception,
 					(nameof(warPlayer), warPlayer));
 			}
 		}
@@ -45,7 +45,7 @@
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler<DataExceptionFactory>.Create(logger, exception,
+				throw ExceptionHandler.Create(logger, exception,
 					(nameof(playerId), playerId),
 					(nameof(warIds), warIds));
 			}

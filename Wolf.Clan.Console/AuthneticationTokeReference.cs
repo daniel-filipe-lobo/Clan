@@ -1,10 +1,10 @@
-﻿namespace ConsoleClan
+﻿namespace Wolf.Clan.Console;
+
+public enum AuthenticationTokeReference
 {
-	public enum AuthenticationTokeReference
-	{
-		Home,
-		Office,
-		Armacao,
-		Vodafone
-	}
+	Home,
+	Office,
+	Armacao,
+	Vodafone
 }
+

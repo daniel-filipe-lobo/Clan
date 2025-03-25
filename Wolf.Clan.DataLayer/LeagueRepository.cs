@@ -23,7 +23,7 @@
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler<DataExceptionFactory>.Create(logger, exception,
+				throw ExceptionHandler.Create(logger, exception,
 					(nameof(league), league));
 			}
 		}
@@ -34,16 +34,16 @@
 			{
 				using (var context = contextFactory.CreateDbContext())
 				{
-					var queriable = (
-						from league in context.LeagueSet
-						where league.Season == season
-						select league);
-					return await queriable.SingleOrDefaultAsync();
+					var queryable = (
+					from league in context.LeagueSet
+					where league.Season == season
+					select league);
+					return await queryable.SingleOrDefaultAsync();
 				}
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler<DataExceptionFactory>.Create(logger, exception,
+				throw ExceptionHandler.Create(logger, exception,
 					(nameof(season), season));
 			}
 		}
