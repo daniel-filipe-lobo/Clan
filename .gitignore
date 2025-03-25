@@ -1,2 +1,4 @@
 .vs/
 obj/
+/Wolf.Clan.Console/bin/Debug/net9.0
+/Wolf.Clan.DataLayer/bin/Debug/net9.0
