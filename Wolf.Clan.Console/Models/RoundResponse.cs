@@ -2,5 +2,6 @@
 
 public record RoundResponse
 {
-	public IEnumerable<string>? warTags { get; set; }
+	[JsonPropertyName("warTags")]
+	public IEnumerable<string>? WarTags { get; set; }
 }

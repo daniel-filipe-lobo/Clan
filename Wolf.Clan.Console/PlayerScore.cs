@@ -6,7 +6,7 @@ internal class PlayerScore
 	private int totalStars = 0;
 	private int totalPenalty = 0;
 	public string Name { get; set; } = null!;
-	public List<PlayerAttack> PlayerAttacks { get; set; } = new();
+	public List<PlayerAttack> PlayerAttacks { get; set; } = [];
 	public int TotalScore { get { GetTotalScore(); return totalScore; } }
 	public int Donations { get; set; } = 0;
 	public int DonationsReceived { get; set; } = 0;

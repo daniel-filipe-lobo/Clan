@@ -2,7 +2,7 @@
 {
 	public static class ServiceConfiguration
 	{
-		public static void AddWolfClanDataLayer(this IServiceCollection services, IConfiguration configuration, int commandTimeoutSeconds, string connectionString)
+		public static void AddWolfClanDataLayer(this IServiceCollection services, int commandTimeoutSeconds, string connectionString)
 		{
 			services.AddDbContextFactory<Context>(options =>
 				{

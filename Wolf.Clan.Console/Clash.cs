@@ -2,9 +2,9 @@
 
 internal class Clash : IClash
 {
-	private JsonSerializerOptions options;
-	private string clanTag = "#PPY0VPRG";
-	private string clanTagEncoded;
+	private readonly JsonSerializerOptions options;
+	private readonly string clanTag = "#PPY0VPRG";
+	private readonly string clanTagEncoded;
 	private readonly ILogger<IClash> logger;
 	private readonly IPlayerRepository playerRepository;
 	private readonly ILeagueRepository leagueRepository;
@@ -39,26 +39,14 @@ internal class Clash : IClash
 		try
 		{
 			string? authenticationToke = null;
-			switch (authenticationTokeReference)
+			authenticationToke = authenticationTokeReference switch
 			{
-				case AuthenticationTokeReference.Home:
-					authenticationToke = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6ImRmNmU3ZmYxLWYxZGUtNDVjMy05NjZiLTQ2YTUyZTg1NDBiMyIsImlhdCI6MTY5NDI5NzUxMywic3ViIjoiZGV2ZWxvcGVyLzRjZmEzY2FhLTQyY2EtNDg3YS00YzUxLTgzZGZkZWJiNWIzNyIsInNjb3BlcyI6WyJjbGFzaCJdLCJsaW1pdHMiOlt7InRpZXIiOiJkZXZlbG9wZXIvc2lsdmVyIiwidHlwZSI6InRocm90dGxpbmcifSx7ImNpZHJzIjpbIjE0OC42My42Mi44NyJdLCJ0eXBlIjoiY2xpZW50In1dfQ.uwFm1hAhzuHotf7SN0HO-92BNRym3qaNZYIcaeO2jolbNj0sgI4cSi4IgAN7vd-hXGmJhbe3GBNTrmXDthCgaQ";
-					break;
-				case AuthenticationTokeReference.Office:
-					authenticationToke = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6ImY4YzJjOTg0LTA1NjItNDA5Mi1iMTIyLTBjZTBhNjIzNGIzMyIsImlhdCI6MTY3MDk1MzU0Mywic3ViIjoiZGV2ZWxvcGVyLzRjZmEzY2FhLTQyY2EtNDg3YS00YzUxLTgzZGZkZWJiNWIzNyIsInNjb3BlcyI6WyJjbGFzaCJdLCJsaW1pdHMiOlt7InRpZXIiOiJkZXZlbG9wZXIvc2lsdmVyIiwidHlwZSI6InRocm90dGxpbmcifSx7ImNpZHJzIjpbIjE5NS4yMy4xOTguMjM5Il0sInR5cGUiOiJjbGllbnQifV19.jd1Yv3NerkMRXF6IuhRJY5RRFarlYXSdv3h31WQ6zHQSxgFUtXq5vRRAElgBzyHW9B76mRFX9OYZhe1by7TAeA";
-					break;
-				case AuthenticationTokeReference.Armacao:
-					authenticationToke = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjgyY2JiNDdjLWY2YmYtNDE3YS1iNzVjLWNjN2VkOTEyZWQ4ZCIsImlhdCI6MTY5MjcwNDQwMSwic3ViIjoiZGV2ZWxvcGVyLzRjZmEzY2FhLTQyY2EtNDg3YS00YzUxLTgzZGZkZWJiNWIzNyIsInNjb3BlcyI6WyJjbGFzaCJdLCJsaW1pdHMiOlt7InRpZXIiOiJkZXZlbG9wZXIvc2lsdmVyIiwidHlwZSI6InRocm90dGxpbmcifSx7ImNpZHJzIjpbIjg1LjI0My4xNDUuMTI0Il0sInR5cGUiOiJjbGllbnQifV19.7sCrE3JdGZgRKwUzQEMJduo774VeyDjiEgZkn94k-vis-nCpT8rUVLKEba8rOpNa3sTi6PM2lJATMycIbgwGRQ";
-					break;
-				case AuthenticationTokeReference.Vodafone:
-					authenticationToke = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjZiYjBmMWFjLThmNjQtNGM3NC05MzM2LTFkYTk1ZjlmMDE5MSIsImlhdCI6MTcxNzk3MTY2Nywic3ViIjoiZGV2ZWxvcGVyLzRjZmEzY2FhLTQyY2EtNDg3YS00YzUxLTgzZGZkZWJiNWIzNyIsInNjb3BlcyI6WyJjbGFzaCJdLCJsaW1pdHMiOlt7InRpZXIiOiJkZXZlbG9wZXIvc2lsdmVyIiwidHlwZSI6InRocm90dGxpbmcifSx7ImNpZHJzIjpbIjg1LjI0MS41MC4yMTMiXSwidHlwZSI6ImNsaWVudCJ9XX0.sb78bo9W7Uw0ojLWNw8jG6LM8PCPb1szJbtxSNels-uZP34MUmhKEFasHLSYm3jnX41Q5HyNRAQBMlseCWUxLQ";
-					break;
-				default:
-					throw new Exception($"Unknown token reference: {authenticationTokeReference}");
-			}
-			var warLogRules = new Wolf.Clan.BusinessLayer.WarLogRules();
-			await warLogRules.X(clanTagEncoded, authenticationToke);
-
+				AuthenticationTokeReference.Home => "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6ImRmNmU3ZmYxLWYxZGUtNDVjMy05NjZiLTQ2YTUyZTg1NDBiMyIsImlhdCI6MTY5NDI5NzUxMywic3ViIjoiZGV2ZWxvcGVyLzRjZmEzY2FhLTQyY2EtNDg3YS00YzUxLTgzZGZkZWJiNWIzNyIsInNjb3BlcyI6WyJjbGFzaCJdLCJsaW1pdHMiOlt7InRpZXIiOiJkZXZlbG9wZXIvc2lsdmVyIiwidHlwZSI6InRocm90dGxpbmcifSx7ImNpZHJzIjpbIjE0OC42My42Mi44NyJdLCJ0eXBlIjoiY2xpZW50In1dfQ.uwFm1hAhzuHotf7SN0HO-92BNRym3qaNZYIcaeO2jolbNj0sgI4cSi4IgAN7vd-hXGmJhbe3GBNTrmXDthCgaQ",
+				AuthenticationTokeReference.Office => "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6ImY4YzJjOTg0LTA1NjItNDA5Mi1iMTIyLTBjZTBhNjIzNGIzMyIsImlhdCI6MTY3MDk1MzU0Mywic3ViIjoiZGV2ZWxvcGVyLzRjZmEzY2FhLTQyY2EtNDg3YS00YzUxLTgzZGZkZWJiNWIzNyIsInNjb3BlcyI6WyJjbGFzaCJdLCJsaW1pdHMiOlt7InRpZXIiOiJkZXZlbG9wZXIvc2lsdmVyIiwidHlwZSI6InRocm90dGxpbmcifSx7ImNpZHJzIjpbIjE5NS4yMy4xOTguMjM5Il0sInR5cGUiOiJjbGllbnQifV19.jd1Yv3NerkMRXF6IuhRJY5RRFarlYXSdv3h31WQ6zHQSxgFUtXq5vRRAElgBzyHW9B76mRFX9OYZhe1by7TAeA",
+				AuthenticationTokeReference.Armacao => "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjgyY2JiNDdjLWY2YmYtNDE3YS1iNzVjLWNjN2VkOTEyZWQ4ZCIsImlhdCI6MTY5MjcwNDQwMSwic3ViIjoiZGV2ZWxvcGVyLzRjZmEzY2FhLTQyY2EtNDg3YS00YzUxLTgzZGZkZWJiNWIzNyIsInNjb3BlcyI6WyJjbGFzaCJdLCJsaW1pdHMiOlt7InRpZXIiOiJkZXZlbG9wZXIvc2lsdmVyIiwidHlwZSI6InRocm90dGxpbmcifSx7ImNpZHJzIjpbIjg1LjI0My4xNDUuMTI0Il0sInR5cGUiOiJjbGllbnQifV19.7sCrE3JdGZgRKwUzQEMJduo774VeyDjiEgZkn94k-vis-nCpT8rUVLKEba8rOpNa3sTi6PM2lJATMycIbgwGRQ",
+				AuthenticationTokeReference.Vodafone => "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjZiYjBmMWFjLThmNjQtNGM3NC05MzM2LTFkYTk1ZjlmMDE5MSIsImlhdCI6MTcxNzk3MTY2Nywic3ViIjoiZGV2ZWxvcGVyLzRjZmEzY2FhLTQyY2EtNDg3YS00YzUxLTgzZGZkZWJiNWIzNyIsInNjb3BlcyI6WyJjbGFzaCJdLCJsaW1pdHMiOlt7InRpZXIiOiJkZXZlbG9wZXIvc2lsdmVyIiwidHlwZSI6InRocm90dGxpbmcifSx7ImNpZHJzIjpbIjg1LjI0MS41MC4yMTMiXSwidHlwZSI6ImNsaWVudCJ9XX0.sb78bo9W7Uw0ojLWNw8jG6LM8PCPb1szJbtxSNels-uZP34MUmhKEFasHLSYm3jnX41Q5HyNRAQBMlseCWUxLQ",
+				_ => throw new Exception($"Unknown token reference: {authenticationTokeReference}"),
+			};
 			var clanDetail = await GetAndDeserializeAsync<ClanDetailResponse>($"https://api.clashofclans.com/v1/clans/{clanTagEncoded}", authenticationToke);
 			if (clanDetail == null)
 			{
@@ -70,7 +58,7 @@ internal class Clash : IClash
 			foreach (var memberDetail in memberDetails)
 			{
 				var memberScore = new MemberScore(memberDetail);
-				memberScores.Add(memberDetail.tag, memberScore);
+				memberScores.Add(memberDetail.Tag, memberScore);
 			}
 
 			var leagueGroup = await GetAndDeserializeAsync<LeagueGroupResponse>($"https://api.clashofclans.com/v1/clans/{clanTagEncoded}/currentwar/leaguegroup", authenticationToke);
@@ -78,16 +66,16 @@ internal class Clash : IClash
 			{
 				return;
 			}
-			if (leagueGroup.clans == null)
+			if (leagueGroup.Clans == null)
 			{
 				var modelWar = await GetAndDeserializeAsync<WarResponse>($"https://api.clashofclans.com/v1/clans/{clanTagEncoded}/currentwar", authenticationToke);
 				await TryReadWarAsync(null, modelWar, memberScores, leagueGroup);
 			}
 			else
 			{
-				foreach (var round in leagueGroup.rounds.EmptyIfNull())
+				foreach (var round in leagueGroup.Rounds.EmptyIfNull())
 				{
-					foreach (var warTag in round.warTags.EmptyIfNull())
+					foreach (var warTag in round.WarTags.EmptyIfNull())
 					{
 						var warTagEncoded = WebUtility.UrlEncode(warTag);
 						var modelWar = await GetAndDeserializeAsync<WarResponse>($"https://api.clashofclans.com/v1/clanwarleagues/wars/{warTagEncoded}", authenticationToke);
@@ -107,8 +95,8 @@ internal class Clash : IClash
 			var wars = await warRepository.SelectAsync(beginDate, endDate);
 			var warIds = wars.Select(war => war.Id).ToList();
 			var leagueWars = await leagueWarRepository.SelectAsync(warIds);
-			List<PlayerScore> playerScores = new();
-			List<string> headers = new();
+			List<PlayerScore> playerScores = [];
+			List<string> headers = [];
 
 			foreach (var player in players)
 			{
@@ -181,7 +169,7 @@ internal class Clash : IClash
 					.OrderBy(startTime => startTime)
 					.ToList();
 
-				Dictionary<DateTimeOffset, int> attackCount = new();
+				Dictionary<DateTimeOffset, int> attackCount = [];
 				int countField = 0;
 				foreach (var startTime in startTimes)
 				{
@@ -261,32 +249,32 @@ internal class Clash : IClash
 
 	private async Task UpsertPlayerAsync(IEnumerable<MemberDetailResponse> memberDetails)
 	{
-		var tags = memberDetails.Select(memberDetail => memberDetail.tag).ToList();
+		var tags = memberDetails.Select(memberDetail => memberDetail.Tag).ToList();
 		var players = await playerRepository.SelectAsync(tags);
 		foreach (var memberDetail in memberDetails)
 		{
-			var player = players.FirstOrDefault(player => player.Tag == memberDetail.tag);
+			var player = players.FirstOrDefault(player => player.Tag == memberDetail.Tag);
 			if (player == null)
 			{
 				player = new Player
 				{
-					Name = memberDetail.name,
-					Tag = memberDetail.tag,
-					Donations = memberDetail.donations,
-					DonationsReceived = memberDetail.donationsReceived,
+					Name = memberDetail.Name,
+					Tag = memberDetail.Tag,
+					Donations = memberDetail.Donations,
+					DonationsReceived = memberDetail.DonationsReceived,
 					HasLeft = false
 				};
 				await playerRepository.InsertAsync(player);
 			}
 			else if (
-				player.Name != memberDetail.name ||
-				player.Donations != memberDetail.donations ||
-				player.DonationsReceived != memberDetail.donationsReceived ||
+				player.Name != memberDetail.Name ||
+				player.Donations != memberDetail.Donations ||
+				player.DonationsReceived != memberDetail.DonationsReceived ||
 				player.HasLeft != false)
 			{
-				player.Name = memberDetail.name;
-				player.Donations = memberDetail.donations;
-				player.DonationsReceived = memberDetail.donationsReceived;
+				player.Name = memberDetail.Name;
+				player.Donations = memberDetail.Donations;
+				player.DonationsReceived = memberDetail.DonationsReceived;
 				player.HasLeft = false;
 			}
 		}
@@ -298,14 +286,14 @@ internal class Clash : IClash
 
 	private async Task UpsertWarLeagueAsync(DataWar war, LeagueGroupResponse leagueGroup)
 	{
-		if (leagueGroup.season == null)
+		if (leagueGroup.Season == null)
 		{
 			return;
 		}
-		var league = await leagueRepository.SelectAsync(leagueGroup.season);
+		var league = await leagueRepository.SelectAsync(leagueGroup.Season);
 		if (league == null)
 		{
-			league = new League { Season = leagueGroup.season };
+			league = new League { Season = leagueGroup.Season };
 			await leagueRepository.InsertAsync(league);
 		}
 		var warLeague = await leagueWarRepository.SelectAsync(league.Id, war.Id);
@@ -324,39 +312,39 @@ internal class Clash : IClash
 		}
 		else
 		{
-			if (modelWar.preparationStartTime == null)
+			if (modelWar.PreparationStartTime == null)
 			{
-				throw new Exception($"{nameof(modelWar.preparationStartTime)} can't be null");
+				throw new Exception($"{nameof(modelWar.PreparationStartTime)} can't be null");
 			}
-			war = await warRepository.SelectAsync(warTag, modelWar.preparationStartTime.Value);
+			war = await warRepository.SelectAsync(warTag, modelWar.PreparationStartTime.Value);
 		}
 		if (war == null)
 		{
 			war = new DataWar
 			{
 				Tag = warTag,
-				EndTime = modelWar.endTime,
-				PreparationStartTime = modelWar.preparationStartTime,
-				StartTime = modelWar.startTime,
-				State = modelWar.state,
-				TeamSize = modelWar.teamSize
+				EndTime = modelWar.EndTime,
+				PreparationStartTime = modelWar.PreparationStartTime,
+				StartTime = modelWar.StartTime,
+				State = modelWar.State,
+				TeamSize = modelWar.TeamSize
 			};
 			await warRepository.InsertAsync(war);
 		}
 		else
 		{
 			if (
-				war.EndTime != modelWar.endTime ||
-				war.PreparationStartTime != modelWar.preparationStartTime ||
-				war.StartTime != modelWar.startTime ||
-				war.State != modelWar.state ||
-				war.TeamSize != modelWar.teamSize)
+				war.EndTime != modelWar.EndTime ||
+				war.PreparationStartTime != modelWar.PreparationStartTime ||
+				war.StartTime != modelWar.StartTime ||
+				war.State != modelWar.State ||
+				war.TeamSize != modelWar.TeamSize)
 			{
-				war.EndTime = modelWar.endTime;
-				war.PreparationStartTime = modelWar.preparationStartTime;
-				war.StartTime = modelWar.startTime;
-				war.State = modelWar.state;
-				war.TeamSize = modelWar.teamSize;
+				war.EndTime = modelWar.EndTime;
+				war.PreparationStartTime = modelWar.PreparationStartTime;
+				war.StartTime = modelWar.StartTime;
+				war.State = modelWar.State;
+				war.TeamSize = modelWar.TeamSize;
 
 				await warRepository.UpdateAsync(war);
 			}
@@ -375,26 +363,26 @@ internal class Clash : IClash
 
 	private async Task<bool> TryReadWarAsync(string? warTag, WarResponse? modelWar, Dictionary<string, MemberScore> memberScores, LeagueGroupResponse? leagueGroup)
 	{
-		if (modelWar == null || leagueGroup == null || modelWar.state == "notInWar" || modelWar.state == null)
+		if (modelWar == null || leagueGroup == null || modelWar.State == "notInWar" || modelWar.State == null)
 		{
 			return false;
 		}
 		var war = await WarUpsertAsync(warTag, modelWar);
 		await UpsertWarLeagueAsync(war, leagueGroup);
-		var contender = modelWar.clan;
-		var opponent = modelWar.opponent;
+		var contender = modelWar.Clan;
+		var opponent = modelWar.Opponent;
 		if (contender == null || opponent == null)
 		{
 			return false;
 		}
 		ClanResponse? clan;
 		ClanResponse? enemyClan;
-		if (contender.tag == clanTag)
+		if (contender.Tag == clanTag)
 		{
 			clan = contender;
 			enemyClan = opponent;
 		}
-		else if (opponent.tag == clanTag)
+		else if (opponent.Tag == clanTag)
 		{
 			clan = opponent;
 			enemyClan = contender;
@@ -403,18 +391,18 @@ internal class Clash : IClash
 		{
 			return false;
 		}
-		if (enemyClan.members == null)
+		if (enemyClan.Members == null)
 		{
 			return false;
 		}
-		foreach (var member in clan.members.EmptyIfNull())
+		foreach (var member in clan.Members.EmptyIfNull())
 		{
-			if (member.tag == null || !memberScores.TryGetValue(member.tag, out MemberScore? memberScore))
+			if (member.Tag == null || !memberScores.TryGetValue(member.Tag, out MemberScore? memberScore))
 			{
 				continue;
 			}
 			await UpsertWarPlayerAsync(war, member);
-			var atacks = member.attacks;
+			var atacks = member.Attacks;
 			if (atacks == null)
 			{
 				continue;
@@ -426,11 +414,11 @@ internal class Clash : IClash
 				{
 					continue;
 				}
-				var enemyMember = enemyClan.members.First(member => member.tag == atack.DefenderTag);
+				var enemyMember = enemyClan.Members.First(member => member.Tag == atack.DefenderTag);
 				await UpsertAttackAsync(atack, war, member, enemyMember);
-				if (enemyMember.mapPosition != null && member.mapPosition != null && modelWar.preparationStartTime != null)
+				if (enemyMember.MapPosition != null && member.MapPosition != null && modelWar.PreparationStartTime != null)
 				{
-					memberScore.Battles.Add(new Battle(++index, modelWar.startTime, atack.Stars, member.mapPosition.Value, enemyMember.mapPosition.Value, BattleTypeReference.League));
+					memberScore.Battles.Add(new Battle(++index, modelWar.StartTime, atack.Stars, member.MapPosition.Value, enemyMember.MapPosition.Value, BattleTypeReference.League));
 				}
 			}
 		}
@@ -439,12 +427,12 @@ internal class Clash : IClash
 
 	private async Task UpsertWarPlayerAsync(DataWar war, MemberResponse member)
 	{
-		var player = (await playerRepository.SelectAsync(new[] { member.tag })).FirstOrDefault();
+		var player = (await playerRepository.SelectAsync([member.Tag])).FirstOrDefault();
 		if (player == null)
 		{
-			throw new Exception($"Player not found {nameof(member.tag)} = {member.tag}");
+			throw new Exception($"Player not found {nameof(member.Tag)} = {member.Tag}");
 		}
-		var warPlayer = (await warPlayerRepository.SelectAsync(player.Id, new[] { war.Id })).SingleOrDefault();
+		var warPlayer = (await warPlayerRepository.SelectAsync(player.Id, [war.Id])).SingleOrDefault();
 		if (warPlayer == null)
 		{
 			await warPlayerRepository.InsertAsync(new WarPlayer { PlayerId = player.Id, WarId = war.Id });
@@ -453,7 +441,7 @@ internal class Clash : IClash
 
 	private async Task UpsertAttackAsync(AttackResponse modelAtack, DataWar war, MemberResponse member, MemberResponse enemyMember)
 	{
-		var player = (await playerRepository.SelectAsync(new[] { modelAtack.AttackerTag })).FirstOrDefault();
+		var player = (await playerRepository.SelectAsync([modelAtack.AttackerTag])).FirstOrDefault();
 		if (player == null)
 		{
 			return;
@@ -470,8 +458,8 @@ internal class Clash : IClash
 				PlayerId = player.Id,
 				Stars = modelAtack.Stars,
 				WarId = war.Id,
-				MapPosition = member.mapPosition ?? -1,
-				EnemyMapPosition = enemyMember.mapPosition ?? -1
+				MapPosition = member.MapPosition ?? -1,
+				EnemyMapPosition = enemyMember.MapPosition ?? -1
 			};
 			await attackRepository.InsertAsync(attack);
 		}
@@ -483,8 +471,8 @@ internal class Clash : IClash
 				attack.Duration != modelAtack.Duration ||
 				attack.Order != modelAtack.Order ||
 				attack.Stars != modelAtack.Stars ||
-				attack.MapPosition != member.mapPosition ||
-				attack.EnemyMapPosition != enemyMember.mapPosition ||
+				attack.MapPosition != member.MapPosition ||
+				attack.EnemyMapPosition != enemyMember.MapPosition ||
 				attack.WarId != war.Id)
 			{
 				attack.DefenderTag = modelAtack.DefenderTag;
@@ -492,8 +480,8 @@ internal class Clash : IClash
 				attack.Duration = modelAtack.Duration;
 				attack.Order = modelAtack.Order;
 				attack.Stars = modelAtack.Stars;
-				attack.MapPosition = member.mapPosition ?? -1;
-				attack.EnemyMapPosition = enemyMember.mapPosition ?? -1;
+				attack.MapPosition = member.MapPosition ?? -1;
+				attack.EnemyMapPosition = enemyMember.MapPosition ?? -1;
 				attack.WarId = war.Id;
 				await attackRepository.UpdateAsync(attack);
 			}

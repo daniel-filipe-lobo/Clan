@@ -2,15 +2,26 @@
 
 public record MemberDetailResponse
 {
-	public string tag { get; set; } = null!;
-	public string name { get; set; } = null!;
-	public string? role { get; set; }
-	public int? expLevel { get; set; }
-	public League? league { get; set; }
-	public int? trophies { get; set; }
-	public int? versusTrophies { get; set; }
-	public int? clanRank { get; set; }
-	public int? previousClanRank { get; set; }
-	public int donations { get; set; }
-	public int donationsReceived { get; set; }
+	[JsonPropertyName("tag")]
+	public string Tag { get; set; } = null!;
+	[JsonPropertyName("name")]
+	public string Name { get; set; } = null!;
+	[JsonPropertyName("role")]
+	public string? Role { get; set; }
+	[JsonPropertyName("expLevel")]
+	public int? ExpLevel { get; set; }
+	[JsonPropertyName("league")]
+	public League? League { get; set; }
+	[JsonPropertyName("trophies")]
+	public int? Trophies { get; set; }
+	[JsonPropertyName("versusTrophies")]
+	public int? VersusTrophies { get; set; }
+	[JsonPropertyName("clanRank")]
+	public int? ClanRank { get; set; }
+	[JsonPropertyName("previousClanRank")]
+	public int? PreviousClanRank { get; set; }
+	[JsonPropertyName("donations")]
+	public int Donations { get; set; }
+	[JsonPropertyName("donationsReceived")]
+	public int DonationsReceived { get; set; }
 }

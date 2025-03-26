@@ -3,7 +3,7 @@
 internal class MemberScore
 {
 	public MemberDetailResponse MemberDetail { get; set; }
-	public List<Battle> Battles { get; private set; } = new List<Battle>();
+	public List<Battle> Battles { get; private set; } = [];
 	public int DonationPenalty { get; private set; }
 
 	public MemberScore(MemberDetailResponse memberDetail)
@@ -14,8 +14,8 @@ internal class MemberScore
 
 	private void CalculateDonationPenalty()
 	{
-		var donations = MemberDetail.donations;
-		var donationsReceived = MemberDetail.donationsReceived;
+		var donations = MemberDetail.Donations;
+		var donationsReceived = MemberDetail.DonationsReceived;
 		var difference = donations - donationsReceived;
 		if (difference < 0)
 		{

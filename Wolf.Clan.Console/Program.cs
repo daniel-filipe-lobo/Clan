@@ -26,14 +26,15 @@ if (string.IsNullOrEmpty(fileName))
 }
 var keyArgument = args[1].Split("=");
 string? key;
-AuthenticationTokeReference authenticationTokeReference = AuthenticationTokeReference.Office;
+;
 if (string.Compare(keyArgument[0].Trim(), "key", true) != 0 || fileNameArgument.Length != 2)
 {
 	Console.WriteLine("<key=home|office> is missing");
 	return;
 }
 key = keyArgument[1]?.Trim();
-if (!Enum.TryParse(key, true, out authenticationTokeReference))
+AuthenticationTokeReference authenticationTokeReference;
+if(!Enum.TryParse(key, true, out authenticationTokeReference))
 {
 	Console.WriteLine("key must be: home|office");
 	return;

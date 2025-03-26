@@ -2,11 +2,18 @@
 
 public record WarResponse
 {
-	public string? state { get; set; }
-	public int teamSize { get; set; }
-	public DateTimeOffset? preparationStartTime { get; set; }
-	public DateTimeOffset startTime { get; set; }
-	public DateTimeOffset? endTime { get; set; }
-	public ClanResponse? clan { get; set; }
-	public ClanResponse? opponent { get; set; }
+	[JsonPropertyName("state")]
+	public string? State { get; set; }
+	[JsonPropertyName("teamSize")]
+	public int TeamSize { get; set; }
+	[JsonPropertyName("preparationStartTime")]
+	public DateTimeOffset? PreparationStartTime { get; set; }
+	[JsonPropertyName("startTime")]
+	public DateTimeOffset StartTime { get; set; }
+	[JsonPropertyName("endTime")]
+	public DateTimeOffset? EndTime { get; set; }
+	[JsonPropertyName("clan")]
+	public ClanResponse? Clan { get; set; }
+	[JsonPropertyName("opponent")]
+	public ClanResponse? Opponent { get; set; }
 }

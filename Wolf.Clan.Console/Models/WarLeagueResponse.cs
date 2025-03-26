@@ -2,6 +2,8 @@
 
 public record WarLeagueResponse
 {
-	public int? id { get; set; }
-	public string? name { get; set; }
+	[JsonPropertyName("id")]
+	public int? Id { get; set; }
+	[JsonPropertyName("name")]
+	public string? Name { get; set; }
 }

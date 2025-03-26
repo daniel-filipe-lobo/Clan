@@ -4,7 +4,7 @@ public static class ExceptionHandler
 {
 	public static Exception Create(ILogger logger, Exception exception)
 	{
-		return Create(logger, default(string), exception);
+		return Create(logger, default, exception);
 	}
 
 	private static Exception Create(ILogger logger, string? message, Exception? exception = null)

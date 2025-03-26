@@ -2,8 +2,12 @@
 
 public record LocationResponse
 {
-	public int? id { get; set; }
-	public string? name { get; set; }
-	public bool? isCountry { get; set; }
-	public string? countryCode { get; set; }
+	[JsonPropertyName("id")]
+	public int? Id { get; set; }
+	[JsonPropertyName("name")]
+	public string? Name { get; set; }
+	[JsonPropertyName("isCountry")]
+	public bool? IsCountry { get; set; }
+	[JsonPropertyName("countryCode")]
+	public string? CountryCode { get; set; }
 }

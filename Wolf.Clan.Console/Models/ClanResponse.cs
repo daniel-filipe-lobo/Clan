@@ -2,12 +2,20 @@
 
 public record ClanResponse
 {
-	public string? tag { get; set; }
-	public string? name { get; set; }
-	public BadgeUrlsResponse? badgeUrls { get; set; }
-	public int? clanLevel { get; set; }
-	public int? attacks { get; set; }
-	public int? stars { get; set; }
-	public float? destructionPercentage { get; set; }
-	public IEnumerable<MemberResponse>? members { get; set; }
+	[JsonPropertyName("tag")]
+	public string? Tag { get; set; }
+	[JsonPropertyName("name")]
+	public string? Name { get; set; }
+	[JsonPropertyName("badgeUrls")]
+	public BadgeUrlsResponse? BadgeUrls { get; set; }
+	[JsonPropertyName("clanLevel")]
+	public int? ClanLevel { get; set; }
+	[JsonPropertyName("attacks")]
+	public int? Attacks { get; set; }
+	[JsonPropertyName("stars")]
+	public int? Stars { get; set; }
+	[JsonPropertyName("destructionPercentage")]
+	public float? DestructionPercentage { get; set; }
+	[JsonPropertyName("members")]
+	public IEnumerable<MemberResponse>? Members { get; set; }
 }

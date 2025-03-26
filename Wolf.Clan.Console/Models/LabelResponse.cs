@@ -2,7 +2,10 @@
 
 public record LabelResponse
 {
-	public int? id { get; set; }
-	public string? name { get; set; }
-	public IconUrlsResponse? iconUrls { get; set; }
+	[JsonPropertyName("id")]
+	public int? Id { get; set; }
+	[JsonPropertyName("name")]
+	public string? Name { get; set; }
+	[JsonPropertyName("iconUrls")]
+	public IconUrlsResponse? IconUrls { get; set; }
 }

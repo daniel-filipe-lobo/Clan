@@ -2,7 +2,7 @@
 
 public class WarLogRules
 {
-	public async Task X(string clanTagEncoded, string authenticationToke)
+	public async Task ReadAsync(string clanTagEncoded, string authenticationToke)
 	{
 		var apiRequests = new ApiRequests();
 		var warLogs = await apiRequests.GetAndDeserializeAsync<ClanWarLogResponse>($"https://api.clashofclans.com/v1/clans/{clanTagEncoded}/warlog", authenticationToke);

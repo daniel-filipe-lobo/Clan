@@ -2,7 +2,10 @@
 
 public record IconUrlsResponse
 {
-	public string? small { get; set; }
-	public string? tiny { get; set; }
-	public string? medium { get; set; }
+	[JsonPropertyName("small")]
+	public string? Small { get; set; }
+	[JsonPropertyName("tiny")]
+	public string? Tiny { get; set; }
+	[JsonPropertyName("medium")]
+	public string? Medium { get; set; }
 }

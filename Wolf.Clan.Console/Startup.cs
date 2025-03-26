@@ -46,7 +46,7 @@ public class Startup
 		int commandTimeoutSeconds = configuration.GetValue<int>("DbCommandTimeoutSeconds");
 		string connectionString = configuration.GetConnectionString("Connection").ThrowIfIsNull();
 
-		services.AddWolfClanConsole(configuration, commandTimeoutSeconds, connectionString);
+		services.AddWolfClanConsole(commandTimeoutSeconds, connectionString);
 	}
 
 	public void Run()

@@ -2,8 +2,12 @@
 
 public record LeagueGroupResponse
 {
-	public string? state { get; set; }
-	public string season { get; set; } = null!;
-	public IEnumerable<ClanResponse>? clans { get; set; }
-	public IEnumerable<RoundResponse>? rounds { get; set; }
+	[JsonPropertyName("state")]
+	public string? State { get; set; }
+	[JsonPropertyName("season")]
+	public string Season { get; set; } = null!;
+	[JsonPropertyName("clans")]
+	public IEnumerable<ClanResponse>? Clans { get; set; }
+	[JsonPropertyName("rounds")]
+	public IEnumerable<RoundResponse>? Rounds { get; set; }
 }
