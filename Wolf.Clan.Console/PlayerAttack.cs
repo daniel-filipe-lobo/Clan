@@ -1,6 +1,6 @@
 ﻿namespace Wolf.Clan.Console;
 
-internal class PlayerAttack
+public class PlayerAttack
 {
 	public DateTimeOffset StartTime { get; set; }
 	public bool IsLeague { get; set; } = false;

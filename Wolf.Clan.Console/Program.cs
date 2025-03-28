@@ -39,5 +39,6 @@ if(!Enum.TryParse(key, true, out authenticationTokeReference))
 	Console.WriteLine("key must be: home|office");
 	return;
 }
-await clash.ProcessAsync(authenticationTokeReference, fileName);
+var playerScores = await clash.GetScoresAsync(authenticationTokeReference);
+clash.ToExcel(fileName, playerScores);
 Console.WriteLine("Finished.");

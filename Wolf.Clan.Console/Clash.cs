@@ -34,7 +34,7 @@ internal class Clash : IClash
 		this.logger = logger;
 	}
 
-	public async Task ProcessAsync(AuthenticationTokeReference authenticationTokeReference, string? fileName)
+	public async Task<IEnumerable<PlayerScore>> GetScoresAsync(AuthenticationTokeReference authenticationTokeReference)
 	{
 		try
 		{
@@ -50,7 +50,7 @@ internal class Clash : IClash
 			var clanDetail = await GetAndDeserializeAsync<ClanDetailResponse>($"https://api.clashofclans.com/v1/clans/{clanTagEncoded}", authenticationToke);
 			if (clanDetail == null)
 			{
-				return;
+				return [];
 			}
 			var memberScores = new Dictionary<string, MemberScore>();
 			var memberDetails = clanDetail.memberList.EmptyIfNull();
@@ -64,7 +64,7 @@ internal class Clash : IClash
 			var leagueGroup = await GetAndDeserializeAsync<LeagueGroupResponse>($"https://api.clashofclans.com/v1/clans/{clanTagEncoded}/currentwar/leaguegroup", authenticationToke);
 			if (leagueGroup == null)
 			{
-				return;
+				return [];
 			}
 			if (leagueGroup.Clans == null)
 			{
@@ -141,109 +141,112 @@ internal class Clash : IClash
 					}
 				}
 			}
-
-			if (fileName == null)
-			{
-				fileName = "clashResults";
-			}
-			fileName = Path.ChangeExtension(fileName, "xlsx");
-			int rowCellIndex = 1;
-			int columnCellIndex = 1;
-			ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-			using (var excelPackage = new ExcelPackage())
-			{
-				var worksheet = excelPackage.Workbook.Worksheets.Add("Clan");
-				worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "Nome";
-				worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "Pontos";
-				worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "Doações";
-				worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "Doações Recebidas";
-				worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "Total Estrelas";
-				worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "Total Penalização";
-
-				var playerAttacks = playerScores
-					.SelectMany(playerScore => playerScore.PlayerAttacks)
-					.ToList();
-				var startTimes = playerAttacks
-					.Select(playerAttack => playerAttack.StartTime)
-					.Distinct()
-					.OrderBy(startTime => startTime)
-					.ToList();
-
-				Dictionary<DateTimeOffset, int> attackCount = [];
-				int countField = 0;
-				foreach (var startTime in startTimes)
-				{
-					var isLeague = playerAttacks.Any(playerAttack => playerAttack.StartTime == startTime && playerAttack.IsLeague);
-					int numberOfAttacks = 1;
-					var date = startTime.ToString("dd-MM-yyyy");
-					var endColumnName = isLeague ? " Liga" : " 1º";
-					worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"Estrelas {date}{endColumnName}";
-					worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"Posição {++countField}";
-					worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"Inimigo {countField}";
-					worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"Penalização {countField}";
-					if (!isLeague)
-					{
-						endColumnName = " 2º";
-						worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"Estrelas {date}{endColumnName}";
-						worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"Posição {++countField}";
-						worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"Inimigo {countField}";
-						worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"Penalização {countField}";
-						numberOfAttacks = 2;
-					}
-					attackCount.Add(startTime, numberOfAttacks);
-				}
-				foreach (var playerScore in playerScores.OrderByDescending(playerScore => playerScore.TotalScore))
-				{
-					++rowCellIndex;
-					columnCellIndex = 1;
-					worksheet.Cells[rowCellIndex, columnCellIndex++].Value = playerScore.Name;
-					worksheet.Cells[rowCellIndex, columnCellIndex++].Value = playerScore.TotalScore;
-					worksheet.Cells[rowCellIndex, columnCellIndex++].Value = playerScore.Donations;
-					worksheet.Cells[rowCellIndex, columnCellIndex++].Value = playerScore.DonationsReceived;
-					worksheet.Cells[rowCellIndex, columnCellIndex++].Value = playerScore.TotalStars;
-					worksheet.Cells[rowCellIndex, columnCellIndex++].Value = playerScore.TotalPenalty;
-					foreach (var startTime in startTimes)
-					{
-						var playerAttack = playerScore.PlayerAttacks.Where(playerAttack => playerAttack.StartTime == startTime).FirstOrDefault();
-						var battles = playerAttack?.Battles;
-						var count = attackCount[startTime];
-						for (int index = 0; index < count; ++index)
-						{
-							var star = "";
-							if (playerAttack != null)
-							{
-								var battle = battles?.ElementAtOrDefault(index);
-								if (battle == null)
-								{
-									star = "Não atacou";
-								}
-								else
-								{
-									star = battle.Stars.ToString();
-								}
-								worksheet.Cells[rowCellIndex, columnCellIndex++].Value = star;
-								worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"{battle?.MapPosition}";
-								worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"{battle?.EnemyMapPosition}";
-								worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"{playerScore.BattlePenalty(battle)}";
-							}
-							else
-							{
-								worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "";
-								worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "";
-								worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "";
-								worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "";
-							}
-						}
-					}
-				}
-				excelPackage.SaveAs(fileName);
-			}
+			return playerScores;
 		}
 		catch (Exception exception)
 		{
 			throw ExceptionHandler<BusinessExceptionFactory>.Create(logger, exception,
-				(nameof(authenticationTokeReference), authenticationTokeReference),
-				(nameof(fileName), fileName));
+				(nameof(authenticationTokeReference), authenticationTokeReference));
+		}
+	}
+
+	public void ToExcel(string? fileName, IEnumerable<PlayerScore> playerScores)
+	{
+		if (fileName == null)
+		{
+			fileName = "clashResults";
+		}
+		fileName = Path.ChangeExtension(fileName, "xlsx");
+		int rowCellIndex = 1;
+		int columnCellIndex = 1;
+		ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+		using (var excelPackage = new ExcelPackage())
+		{
+			var worksheet = excelPackage.Workbook.Worksheets.Add("Clan");
+			worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "Nome";
+			worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "Pontos";
+			worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "Doações";
+			worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "Doações Recebidas";
+			worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "Total Estrelas";
+			worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "Total Penalização";
+
+			var playerAttacks = playerScores
+				.SelectMany(playerScore => playerScore.PlayerAttacks)
+				.ToList();
+			var startTimes = playerAttacks
+				.Select(playerAttack => playerAttack.StartTime)
+				.Distinct()
+				.OrderBy(startTime => startTime)
+				.ToList();
+
+			Dictionary<DateTimeOffset, int> attackCount = [];
+			int countField = 0;
+			foreach (var startTime in startTimes)
+			{
+				var isLeague = playerAttacks.Any(playerAttack => playerAttack.StartTime == startTime && playerAttack.IsLeague);
+				int numberOfAttacks = 1;
+				var date = startTime.ToString("dd-MM-yyyy");
+				var endColumnName = isLeague ? " Liga" : " 1º";
+				worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"Estrelas {date}{endColumnName}";
+				worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"Posição {++countField}";
+				worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"Inimigo {countField}";
+				worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"Penalização {countField}";
+				if (!isLeague)
+				{
+					endColumnName = " 2º";
+					worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"Estrelas {date}{endColumnName}";
+					worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"Posição {++countField}";
+					worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"Inimigo {countField}";
+					worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"Penalização {countField}";
+					numberOfAttacks = 2;
+				}
+				attackCount.Add(startTime, numberOfAttacks);
+			}
+			foreach (var playerScore in playerScores.OrderByDescending(playerScore => playerScore.TotalScore))
+			{
+				++rowCellIndex;
+				columnCellIndex = 1;
+				worksheet.Cells[rowCellIndex, columnCellIndex++].Value = playerScore.Name;
+				worksheet.Cells[rowCellIndex, columnCellIndex++].Value = playerScore.TotalScore;
+				worksheet.Cells[rowCellIndex, columnCellIndex++].Value = playerScore.Donations;
+				worksheet.Cells[rowCellIndex, columnCellIndex++].Value = playerScore.DonationsReceived;
+				worksheet.Cells[rowCellIndex, columnCellIndex++].Value = playerScore.TotalStars;
+				worksheet.Cells[rowCellIndex, columnCellIndex++].Value = playerScore.TotalPenalty;
+				foreach (var startTime in startTimes)
+				{
+					var playerAttack = playerScore.PlayerAttacks.Where(playerAttack => playerAttack.StartTime == startTime).FirstOrDefault();
+					var battles = playerAttack?.Battles;
+					var count = attackCount[startTime];
+					for (int index = 0; index < count; ++index)
+					{
+						var star = "";
+						if (playerAttack != null)
+						{
+							var battle = battles?.ElementAtOrDefault(index);
+							if (battle == null)
+							{
+								star = "Não atacou";
+							}
+							else
+							{
+								star = battle.Stars.ToString();
+							}
+							worksheet.Cells[rowCellIndex, columnCellIndex++].Value = star;
+							worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"{battle?.MapPosition}";
+							worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"{battle?.EnemyMapPosition}";
+							worksheet.Cells[rowCellIndex, columnCellIndex++].Value = $"{playerScore.BattlePenalty(battle)}";
+						}
+						else
+						{
+							worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "";
+							worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "";
+							worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "";
+							worksheet.Cells[rowCellIndex, columnCellIndex++].Value = "";
+						}
+					}
+				}
+			}
+			excelPackage.SaveAs(fileName);
 		}
 	}
 

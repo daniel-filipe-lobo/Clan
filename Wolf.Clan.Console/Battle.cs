@@ -1,6 +1,6 @@
 ﻿namespace Wolf.Clan.Console;
 
-internal class Battle
+public class Battle
 {
 	public static readonly int MaximumPositionDifference = 10;
 	public int Ordinal { get; }

@@ -2,5 +2,6 @@
 
 public interface IClash
 {
-	Task ProcessAsync(AuthenticationTokeReference authenticationToke, string? fileName);
+	Task<IEnumerable<PlayerScore>> GetScoresAsync(AuthenticationTokeReference authenticationToke);
+	void ToExcel(string? fileName, IEnumerable<PlayerScore> playerScores);
 }

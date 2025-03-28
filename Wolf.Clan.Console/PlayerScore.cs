@@ -1,6 +1,6 @@
 ﻿namespace Wolf.Clan.Console;
 
-internal class PlayerScore
+public class PlayerScore
 {
 	private int totalScore = 0;
 	private int totalStars = 0;
