@@ -19,6 +19,12 @@
 			jsonSerializerOptions.Converters.Add(new DateTimeOffsetConverterUsingDateTimeParse());
 		}
 
+		private string GetClanTageEncoded()
+		{
+			return HttpUtility.UrlEncode(options.Value.ClanTag);
+
+		}
+
 		public async Task<T?> GetAsync<T>(string uriSegment)
 		{
 			try
@@ -44,16 +50,27 @@
 			}
 		}
 
-		public async Task<ClanDetailResponse?> GetClanAsync(string clanTag)
+		public async Task<ClanDetailResponse?> GetClanAsync()
 		{
 			try
 			{
-				return await GetAsync<ClanDetailResponse>(HttpUtility.UrlEncode(clanTag));
+				return await GetAsync<ClanDetailResponse>($"clans/{GetClanTageEncoded()}");
 			}
 			catch (Exception exception)
 			{
-				throw ExceptionHandler.Create(logger, exception,
-					(nameof(clanTag), clanTag));
+				throw ExceptionHandler.Create(logger, exception);
+			}
+		}
+
+		public async Task<LeagueGroupResponse?> GetLeagueGroupAsync()
+		{
+			try
+			{
+				return await GetAsync<LeagueGroupResponse>($"clans/{GetClanTageEncoded()}/currentwar/leaguegroup");
+			}
+			catch (Exception exception)
+			{
+				throw ExceptionHandler.Create(logger, exception);
 			}
 		}
 	}

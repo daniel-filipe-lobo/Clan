@@ -4,5 +4,6 @@
 	{
 		public required string AuthenticationToken { get; set; }
 		public required string BaseUrl { get; set; }
+		public required string ClanTag { get; set; }
 	}
 }

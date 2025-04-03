@@ -1,6 +1,4 @@
-﻿using Wolf.Clan.BusinessLayer.Models.Api;
-
-namespace Wolf.Clan.Console;
+﻿namespace Wolf.Clan.Console;
 
 internal class MemberScore
 {

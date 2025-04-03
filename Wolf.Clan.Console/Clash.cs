@@ -51,9 +51,8 @@ internal class Clash : IClash
 				_ => throw new Exception($"Unknown token reference: {authenticationTokeReference}"),
 			};
 
-			var clanDetail = await clashOfClansApi.GetAsync<ClanDetailResponse>(HttpUtility.UrlEncode(clanTag));
+			var clanDetail = await clashOfClansApi.GetClanAsync();
 
-			//var clanDetail = await GetAndDeserializeAsync<ClanDetailResponse>($"https://api.clashofclans.com/v1/clans/{clanTagEncoded}", authenticationToke);
 			if (clanDetail == null)
 			{
 				return [];
@@ -67,7 +66,7 @@ internal class Clash : IClash
 				memberScores.Add(memberDetail.Tag, memberScore);
 			}
 
-			var leagueGroup = await GetAndDeserializeAsync<LeagueGroupResponse>($"https://api.clashofclans.com/v1/clans/{clanTagEncoded}/currentwar/leaguegroup", authenticationToke);
+			var leagueGroup = await clashOfClansApi.GetLeagueGroupAsync();
 			if (leagueGroup == null)
 			{
 				return [];
