@@ -26,9 +26,9 @@
 		{
 			//arrange
 			var expected = new Test { Id = 1, Name = "{D69585D3-107A-4FA0-A711-F34309C978EB}" };
-			GeneralStartup generalStartup = new((services, configuration) => ConfigureServices(services, configuration, () => DefaultResponse(expected)), isAddJsonFileOptional: true);
+			Startup startup = new((services, configuration) => ConfigureServices(services, configuration, () => DefaultResponse(expected)));
 
-			var clashOfClansApi = generalStartup.Provider.GetRequiredService<IClashOfClansApi>();
+			var clashOfClansApi = startup.GeneralStartup.Provider.GetRequiredService<IClashOfClansApi>();
 
 			//act
 			var result = await clashOfClansApi.GetAsync<Test>("");
@@ -41,8 +41,8 @@
 		public async Task GetAsync_ReturnsNull()
 		{
 			//arrange
-			GeneralStartup generalStartup = new((services, configuration) => ConfigureServices(services, configuration, () => DefaultResponse<object?>(null)), isAddJsonFileOptional: true);
-			var clashOfClansApi = generalStartup.Provider.GetRequiredService<IClashOfClansApi>();
+			Startup startup = new((services, configuration) => ConfigureServices(services, configuration, () => DefaultResponse<object?>(null)));
+			var clashOfClansApi = startup.GeneralStartup.Provider.GetRequiredService<IClashOfClansApi>();
 
 			//act
 			var result = await clashOfClansApi.GetAsync<Test>("");
@@ -55,8 +55,8 @@
 		public async Task GetAsync_ThrowsException()
 		{
 			//arrange
-			GeneralStartup generalStartup = new((services, configuration) => ConfigureServices(services, configuration, () => throw new Exception()), isAddJsonFileOptional: true);
-			var clashOfClansApi = generalStartup.Provider.GetRequiredService<IClashOfClansApi>();
+			Startup startup = new((services, configuration) => ConfigureServices(services, configuration, () => throw new Exception()));
+			var clashOfClansApi = startup.GeneralStartup.Provider.GetRequiredService<IClashOfClansApi>();
 
 			//act
 			var result = async () => await clashOfClansApi.GetAsync<Test>("");

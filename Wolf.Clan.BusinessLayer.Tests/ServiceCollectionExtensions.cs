@@ -15,7 +15,6 @@
 				var httpClientWrapperMock = new Mock<IHttpClientWrapper>();
 				httpClientWrapperMock.SetupGet(httpClientWrapper => httpClientWrapper.DefaultRequestHeaders).Returns(Mock.Of<IHttpRequestHeadersWraper>());
 				httpClientWrapperFactoryMock.Setup(httpClientWrapperFactory => httpClientWrapperFactory.Create()).Returns(httpClientWrapperMock.Object);
-				//var httpResponseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.OK) { Content = response != null ? new StringContent(JsonSerializer.Serialize(response)) : null };
 				httpClientWrapperMock.Setup(httpClientWrapper => httpClientWrapper.GetAsync(It.IsAny<string>())).ReturnsAsync(response);
 				return httpClientWrapperFactoryMock.Object;
 			}));

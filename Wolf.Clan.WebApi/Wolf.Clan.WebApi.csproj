@@ -13,4 +13,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Wolf.Clan.BusinessLayer\Wolf.Clan.BusinessLayer.csproj" />
+    <ProjectReference Include="..\Wolf.Startup.Utilities\Wolf.Startup.Utilities.csproj" />
+  </ItemGroup>
+
 </Project>

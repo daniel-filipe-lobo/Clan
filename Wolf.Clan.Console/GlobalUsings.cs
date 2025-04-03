@@ -1,6 +1,7 @@
 ﻿global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Logging;
 
 global using OfficeOpenXml;
@@ -9,10 +10,8 @@ global using System.Net;
 global using System.Net.Http.Headers;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
-global using System.Web;
 
 global using Wolf.Clan.BusinessLayer;
-global using Wolf.Clan.BusinessLayer.Models;
 global using Wolf.Clan.BusinessLayer.Models.Api;
 global using Wolf.Clan.Console;
 global using Wolf.Clan.Console.Models;

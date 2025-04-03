@@ -4,21 +4,26 @@ namespace Wolf.Clan.webApi.Controllers
 	[Route("[controller]")]
 	public class ClanController : ControllerBase
 	{
+		private readonly ILogger<ClanController> _logger;
+		private readonly Lazy<IClashOfClansApi> clashOfClansApi;
 		private static readonly string[] Summaries =
 		[
 			"Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorch   ing"
 		];
 
-		private readonly ILogger<ClanController> _logger;
-
-		public ClanController(ILogger<ClanController> logger)
+		public ClanController(
+			ILogger<ClanController> logger,
+			Lazy<IClashOfClansApi> clashOfClansApi)
 		{
 			_logger = logger;
+			this.clashOfClansApi = clashOfClansApi;
 		}
 
 		[HttpGet]
-		public IEnumerable<WeatherForecast> Get()
+		public async Task<IEnumerable<WeatherForecast>> GetAsync()
 		{
+			var clanDetail = await clashOfClansApi.Value.GetClanAsync();
+
 			return Enumerable.Range(1, 5).Select(index => new WeatherForecast
 			{
 				Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
