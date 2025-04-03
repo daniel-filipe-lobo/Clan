@@ -2,6 +2,6 @@
 {
 	public interface IClashOfClansApi
 	{
-		Task<T?> GetAndDeserializeAsync<T>(string requestUri);
+		Task<T?> GetAsync<T>(string requestUri);
 	}
 }

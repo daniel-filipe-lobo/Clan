@@ -1,4 +1,4 @@
-﻿namespace Wolf.Clan.Console.Models;
+﻿namespace Wolf.Clan.BusinessLayer.Models.Api;
 
 public record MemberDetailResponse
 {
@@ -11,7 +11,7 @@ public record MemberDetailResponse
 	[JsonPropertyName("expLevel")]
 	public int? ExpLevel { get; set; }
 	[JsonPropertyName("league")]
-	public League? League { get; set; }
+	public LeagueResponse? League { get; set; }
 	[JsonPropertyName("trophies")]
 	public int? Trophies { get; set; }
 	[JsonPropertyName("versusTrophies")]

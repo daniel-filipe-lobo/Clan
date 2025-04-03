@@ -12,6 +12,7 @@ internal class Clash : IClash
 	private readonly ILeagueWarRepository leagueWarRepository;
 	private readonly IAttackRepository attackRepository;
 	private readonly IWarPlayerRepository warPlayerRepository;
+	private readonly IClashOfClansApi clashOfClansApi;
 
 	public Clash(
 		ILogger<IClash> logger,
@@ -20,7 +21,8 @@ internal class Clash : IClash
 		IWarRepository warRepository,
 		ILeagueWarRepository leagueWarRepository,
 		IAttackRepository attackRepository,
-		IWarPlayerRepository warPlayerRepository)
+		IWarPlayerRepository warPlayerRepository,
+		IClashOfClansApi clashOfClansApi)
 	{
 		options = new JsonSerializerOptions();
 		options.Converters.Add(new DateTimeOffsetConverterUsingDateTimeParse());
@@ -32,6 +34,7 @@ internal class Clash : IClash
 		this.attackRepository = attackRepository;
 		this.warPlayerRepository = warPlayerRepository;
 		this.logger = logger;
+		this.clashOfClansApi = clashOfClansApi;
 	}
 
 	public async Task<IEnumerable<PlayerScore>> GetScoresAsync(AuthenticationTokeReference authenticationTokeReference)
@@ -47,13 +50,16 @@ internal class Clash : IClash
 				AuthenticationTokeReference.Vodafone => "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjZiYjBmMWFjLThmNjQtNGM3NC05MzM2LTFkYTk1ZjlmMDE5MSIsImlhdCI6MTcxNzk3MTY2Nywic3ViIjoiZGV2ZWxvcGVyLzRjZmEzY2FhLTQyY2EtNDg3YS00YzUxLTgzZGZkZWJiNWIzNyIsInNjb3BlcyI6WyJjbGFzaCJdLCJsaW1pdHMiOlt7InRpZXIiOiJkZXZlbG9wZXIvc2lsdmVyIiwidHlwZSI6InRocm90dGxpbmcifSx7ImNpZHJzIjpbIjg1LjI0MS41MC4yMTMiXSwidHlwZSI6ImNsaWVudCJ9XX0.sb78bo9W7Uw0ojLWNw8jG6LM8PCPb1szJbtxSNels-uZP34MUmhKEFasHLSYm3jnX41Q5HyNRAQBMlseCWUxLQ",
 				_ => throw new Exception($"Unknown token reference: {authenticationTokeReference}"),
 			};
-			var clanDetail = await GetAndDeserializeAsync<ClanDetailResponse>($"https://api.clashofclans.com/v1/clans/{clanTagEncoded}", authenticationToke);
+
+			var clanDetail = await clashOfClansApi.GetAsync<ClanDetailResponse>(HttpUtility.UrlEncode(clanTag));
+
+			//var clanDetail = await GetAndDeserializeAsync<ClanDetailResponse>($"https://api.clashofclans.com/v1/clans/{clanTagEncoded}", authenticationToke);
 			if (clanDetail == null)
 			{
 				return [];
 			}
 			var memberScores = new Dictionary<string, MemberScore>();
-			var memberDetails = clanDetail.memberList.EmptyIfNull();
+			var memberDetails = clanDetail.MemberList.EmptyIfNull();
 			await UpsertPlayerAsync(memberDetails);
 			foreach (var memberDetail in memberDetails)
 			{

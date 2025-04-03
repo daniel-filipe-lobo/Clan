@@ -1,7 +1,5 @@
-﻿using Wolf.Clan.Console;
-
-var startup = new Startup();
-var clash = startup.Provider.GetService<IClash>();
+﻿var startup = new Startup();
+var clash = startup.GeneralStartup.Provider.GetService<IClash>();
 if (clash == null)
 {
 	Console.WriteLine("Null parser");
@@ -34,7 +32,7 @@ if (string.Compare(keyArgument[0].Trim(), "key", true) != 0 || fileNameArgument.
 }
 key = keyArgument[1]?.Trim();
 AuthenticationTokeReference authenticationTokeReference;
-if(!Enum.TryParse(key, true, out authenticationTokeReference))
+if (!Enum.TryParse(key, true, out authenticationTokeReference))
 {
 	Console.WriteLine("key must be: home|office");
 	return;

@@ -34,5 +34,10 @@
 		{
 			return httpClient.GetAsync(requestUri);
 		}
+
+		public Task<HttpResponseMessage> GetAsync(Uri requestUri)
+		{
+			return httpClient.GetAsync(requestUri);
+		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿namespace Wolf.Clan.Console.Models;
+﻿namespace Wolf.Clan.BusinessLayer.Models.Api;
 
 public record WarLeagueResponse
 {

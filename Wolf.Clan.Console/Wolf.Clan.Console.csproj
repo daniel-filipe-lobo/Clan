@@ -11,12 +11,13 @@
     <PackageReference Include="EPPlus" Version="7.7.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.3" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.3" />
-    <PackageReference Include="Wolf.Utilities" Version="2.0.0" />
+    <PackageReference Include="Wolf.Utilities" Version="2.1.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Wolf.Clan.BusinessLayer\Wolf.Clan.BusinessLayer.csproj" />
     <ProjectReference Include="..\Wolf.Clan.DataLayer\Wolf.Clan.DataLayer.csproj" />
+    <ProjectReference Include="..\Wolf.Startup.Utilities\Wolf.Startup.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>

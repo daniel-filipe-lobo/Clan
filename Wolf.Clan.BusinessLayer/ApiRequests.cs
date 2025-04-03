@@ -2,7 +2,7 @@
 
 internal class ApiRequests
 {
-	private JsonSerializerOptions options;
+	private readonly JsonSerializerOptions options;
 
 	public ApiRequests()
 	{
