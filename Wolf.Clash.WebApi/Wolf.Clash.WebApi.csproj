@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Wolf.Clan.BusinessLayer\Wolf.Clash.BusinessLayer.csproj" />
+    <ProjectReference Include="..\Wolf.Clash.BusinessLayer\Wolf.Clash.BusinessLayer.csproj" />
     <ProjectReference Include="..\Wolf.Startup.Utilities\Wolf.Startup.Utilities.csproj" />
   </ItemGroup>
 

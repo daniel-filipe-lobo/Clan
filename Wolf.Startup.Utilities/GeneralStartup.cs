@@ -14,7 +14,12 @@ public class GeneralStartup
 		this.isAddJsonFileOptional = isAddJsonFileOptional;
 		hostBuilder
 			.ConfigureAppConfiguration(ConfigureApplication)
-			.ConfigureServices(ConfigureServices);
+			.ConfigureServices(ConfigureServices)
+			.UseDefaultServiceProvider((context, options) => {
+#if DEBUG
+				options.ValidateScopes = true;
+#endif
+			});
 		Provider = getServiceProvider();
 	}
 

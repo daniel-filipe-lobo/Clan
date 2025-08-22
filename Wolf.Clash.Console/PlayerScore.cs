@@ -35,7 +35,24 @@ public class PlayerScore
 
 	public int BattlePenalty(Battle? battle)
 	{
-		return battle == null ? 1 : battle.Penalty;
+		var penalty = 0;
+		if (battle == null)
+		{
+			penalty += 3;
+		}
+		else
+		{
+			var positionDifference = Math.Abs(battle.MapPosition - battle.EnemyMapPosition);
+			if (battle.Ordinal == 1 && positionDifference > 0)
+			{
+				penalty += 3;
+			}
+			if (positionDifference > 5)
+			{
+				penalty += 3;
+			}
+		}
+		return penalty;
 	}
 
 	public int BattleStars(Battle? battle)

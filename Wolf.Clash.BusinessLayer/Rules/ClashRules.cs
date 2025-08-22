@@ -14,7 +14,7 @@ internal class ClashRules : IClashRules
 	{
 		try
 		{
-
+			throw new NotImplementedException("GetAsync method is not implemented yet.");
 		}
 		catch (Exception exception)
 		{

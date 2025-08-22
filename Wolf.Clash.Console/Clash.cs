@@ -1,4 +1,6 @@
-﻿namespace Wolf.Clash.Console;
+﻿using System.Web;
+
+namespace Wolf.Clash.Console;
 
 internal class Clash : IClash
 {
@@ -105,6 +107,8 @@ internal class Clash : IClash
 
 			foreach (var player in players)
 			{
+				//var userTagUrlEncoded = HttpUtility.UrlEncode(player.Tag);
+				//var playerInformation = await GetAndDeserializeAsync<string>($"https://api.clashofclans.com/v1/players/{userTagUrlEncoded}", authenticationToke);
 				var playerScore = new PlayerScore { Name = player.Name };
 				playerScores.Add(playerScore);
 				playerScore.Donations = player.Donations;
@@ -207,7 +211,8 @@ internal class Clash : IClash
 				}
 				attackCount.Add(startTime, numberOfAttacks);
 			}
-			foreach (var playerScore in playerScores.OrderByDescending(playerScore => playerScore.TotalScore))
+			var orderedPlayerScores = playerScores.OrderByDescending(playerScore => playerScore.TotalScore);
+			foreach (var playerScore in orderedPlayerScores)
 			{
 				++rowCellIndex;
 				columnCellIndex = 1;
